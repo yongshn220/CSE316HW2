@@ -9,6 +9,12 @@ export default class SongCard extends React.Component {
             draggedTo: false
         }
     }
+    handleOnClick = (event) => {
+        if (event.detail === 2) {
+            event.preventDefault();
+            this.props.editSongCallback();
+        }
+    }
     handleDragStart = (event) => {
         event.dataTransfer.setData("song", event.target.id);
         this.setState(prevState => ({
@@ -76,9 +82,14 @@ export default class SongCard extends React.Component {
                 onDragLeave={this.handleDragLeave}
                 onDrop={this.handleDrop}
                 draggable="true"
+                onClick={this.handleOnClick}
             >
                 {num}. 
                 <a href={link}>{song.title} by {song.artist}</a>
+                <button
+                    id={'song-delete-' + num}
+                    className={"delete-song-button"}
+                >X</button>
             </div>
         )
     }

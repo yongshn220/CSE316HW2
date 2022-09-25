@@ -10,6 +10,7 @@ import MoveSong_Transaction from './transactions/MoveSong_Transaction.js';
 
 // THESE REACT COMPONENTS ARE MODALS
 import DeleteListModal from './components/DeleteListModal.js';
+import EditSongModal from './components/EditSongModal.js';
 
 // THESE REACT COMPONENTS ARE IN OUR UI
 import Banner from './components/Banner.js';
@@ -269,10 +270,35 @@ class App extends React.Component {
         let modal = document.getElementById("delete-list-modal");
         modal.classList.add("is-visible");
     }
+    
     // THIS FUNCTION IS FOR HIDING THE MODAL
     hideDeleteListModal() {
         let modal = document.getElementById("delete-list-modal");
         modal.classList.remove("is-visible");
+    }
+
+    // Song Edit Modal
+    showEditSongInfoModal = () => {
+        this.setState(prevState => ({
+            currentList: prevState.currentList,
+            listKeyPairMarkedForDeletion: prevState.listKeyPairMarkedForDeletion,
+            sessionData: prevState.sessionData
+        }), () => {
+            let modal = document.getElementById("edit-songinfo");
+            console.log("show edit sone");
+            modal.classList.add("is-visible");
+        })
+    }
+    hideEditSongInfoModal = () => {
+        this.setState(prevState => ({
+            currentList: prevState.currentList,
+            listKeyPairMarkedForDeletion: prevState.listKeyPairMarkedForDeletion,
+            sessionData: prevState.sessionData
+        }), () => {
+            let modal = document.getElementById("edit-songinfo");
+            console.log("remove edit sone");
+            modal.classList.remove("is-visible");
+        })
     }
     render() {
         let canAddSong = this.state.currentList !== null;
@@ -288,7 +314,7 @@ class App extends React.Component {
                 <SidebarList
                     currentList={this.state.currentList}
                     keyNamePairs={this.state.sessionData.keyNamePairs}
-                    deleteListCallback={this.markListForDeletion}
+                    deleteLfistCallback={this.markListForDeletion}
                     loadListCallback={this.loadList}
                     renameListCallback={this.renameList}
                 />
@@ -303,13 +329,19 @@ class App extends React.Component {
                 />
                 <PlaylistCards
                     currentList={this.state.currentList}
-                    moveSongCallback={this.addMoveSongTransaction} />
+                    moveSongCallback={this.addMoveSongTransaction} 
+                    editSongCallback={this.showEditSongInfoModal}
+                    hideEditSongCallback={this.hideEditSongInfoModal}
+                />
                 <Statusbar 
                     currentList={this.state.currentList} />
                 <DeleteListModal
                     listKeyPair={this.state.listKeyPairMarkedForDeletion}
                     hideDeleteListModalCallback={this.hideDeleteListModal}
                     deleteListCallback={this.deleteMarkedList}
+                />
+                <EditSongModal
+                    hideEditSongCallback={this.hideEditSongInfoModal}
                 />
             </div>
         );
