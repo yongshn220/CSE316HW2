@@ -12,7 +12,7 @@ export default class SongCard extends React.Component {
     handleOnClick = (event) => {
         if (event.detail === 2) {
             event.preventDefault();
-            this.props.editSongCallback();
+            this.props.showEditSongCallback(this.getItemNum());
         }
     }
     handleDragStart = (event) => {

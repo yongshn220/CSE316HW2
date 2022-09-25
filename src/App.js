@@ -278,14 +278,18 @@ class App extends React.Component {
     }
 
     // Song Edit Modal
-    showEditSongInfoModal = () => {
+    showEditSongInfoModal = (num) => {
         this.setState(prevState => ({
             currentList: prevState.currentList,
             listKeyPairMarkedForDeletion: prevState.listKeyPairMarkedForDeletion,
             sessionData: prevState.sessionData
         }), () => {
+            let index = num - 1;
+            document.getElementById("edit-input-title").value = this.state.currentList.songs[index].title;
+            document.getElementById("edit-input-artist").value = this.state.currentList.songs[index].artist;
+            document.getElementById("edit-input-youtubeId").value = this.state.currentList.songs[index].youTubeId;
             let modal = document.getElementById("edit-songinfo");
-            console.log("show edit sone");
+            modal.value = index;
             modal.classList.add("is-visible");
         })
     }
@@ -300,6 +304,17 @@ class App extends React.Component {
             modal.classList.remove("is-visible");
         })
     }
+
+    editSongInfo = (num) => {
+        let list = this.state.currentList;
+        console.log(list);
+        console.log(num);
+        list.songs[num].title = document.getElementById("edit-input-title").value;
+        list.songs[num].artist = document.getElementById("edit-input-artist").value;
+        list.songs[num].youTubeId = document.getElementById("edit-input-youtubeId").value;
+        this.setStateWithUpdatedList(list);
+    }
+
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
@@ -330,7 +345,7 @@ class App extends React.Component {
                 <PlaylistCards
                     currentList={this.state.currentList}
                     moveSongCallback={this.addMoveSongTransaction} 
-                    editSongCallback={this.showEditSongInfoModal}
+                    showEditSongCallback={this.showEditSongInfoModal}
                     hideEditSongCallback={this.hideEditSongInfoModal}
                 />
                 <Statusbar 
@@ -341,6 +356,8 @@ class App extends React.Component {
                     deleteListCallback={this.deleteMarkedList}
                 />
                 <EditSongModal
+                    currentList={this.state.currentList}
+                    editSongInfoCallback={this.editSongInfo}
                     hideEditSongCallback={this.hideEditSongInfoModal}
                 />
             </div>
