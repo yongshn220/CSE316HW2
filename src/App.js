@@ -10,6 +10,7 @@ import MoveSong_Transaction from './transactions/MoveSong_Transaction.js';
 
 // THESE REACT COMPONENTS ARE MODALS
 import DeleteListModal from './components/DeleteListModal.js';
+import DeleteSongModal from './components/DeleteSongModal.js';
 import EditSongModal from './components/EditSongModal.js';
 
 // THESE REACT COMPONENTS ARE IN OUR UI
@@ -266,15 +267,35 @@ class App extends React.Component {
     }
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
-    showDeleteListModal() {
+    showDeleteListModal = () => {
         let modal = document.getElementById("delete-list-modal");
         modal.classList.add("is-visible");
     }
     
     // THIS FUNCTION IS FOR HIDING THE MODAL
-    hideDeleteListModal() {
+    hideDeleteListModal = () => {
         let modal = document.getElementById("delete-list-modal");
         modal.classList.remove("is-visible");
+    }
+
+    // Song Delete Modal
+    showDeleteSongModal = (num) => {
+        let modal = document.getElementById("delete-song-modal");
+        modal.value = num-1;
+        modal.classList.add("is-visible");
+    }
+    
+    hideDeleteSongModal = () => {
+        let modal = document.getElementById("delete-song-modal");
+        modal.classList.remove("is-visible");
+    }
+
+    deleteSong = () => {
+        let index = document.getElementById("delete-song-modal").value;
+        let list = this.state.currentList;
+        list.songs.splice(index, 1);
+        this.setStateWithUpdatedList(list);
+        this.hideDeleteSongModal();
     }
 
     // Song Edit Modal
@@ -347,6 +368,7 @@ class App extends React.Component {
                     moveSongCallback={this.addMoveSongTransaction} 
                     showEditSongCallback={this.showEditSongInfoModal}
                     hideEditSongCallback={this.hideEditSongInfoModal}
+                    showDeleteSongCallback={this.showDeleteSongModal}
                 />
                 <Statusbar 
                     currentList={this.state.currentList} />
@@ -354,6 +376,10 @@ class App extends React.Component {
                     listKeyPair={this.state.listKeyPairMarkedForDeletion}
                     hideDeleteListModalCallback={this.hideDeleteListModal}
                     deleteListCallback={this.deleteMarkedList}
+                />
+                <DeleteSongModal
+                    deleteSongCallback={this.deleteSong}
+                    hideDeleteSongModal={this.hideDeleteSongModal}
                 />
                 <EditSongModal
                     currentList={this.state.currentList}
