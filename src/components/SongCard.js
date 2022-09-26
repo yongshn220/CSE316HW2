@@ -47,6 +47,10 @@ export default class SongCard extends React.Component {
         event.preventDefault();
         let target = event.target;
         let targetId = target.id;
+        if (target.className !== "playlister-song-dragged-to")
+        {
+            return;
+        }
         targetId = targetId.substring(target.id.indexOf("-") + 1);
         let sourceId = event.dataTransfer.getData("song");
         sourceId = sourceId.substring(sourceId.indexOf("-") + 1);
@@ -68,6 +72,7 @@ export default class SongCard extends React.Component {
 
     render() {
         const { song } = this.props;
+        console.log(song);
         let num = this.getItemNum();
         let itemClass = "playlister-song";
         if (this.state.draggedTo) {
@@ -87,7 +92,7 @@ export default class SongCard extends React.Component {
                 onClick={this.handleOnClick}
             >
                 {num}. 
-                <a href={link}>{song.title} by {song.artist}</a>
+                <a id={'song-text-' + num} href={link} draggable="false" value={num}>{song.title} by {song.artist}</a>
                 <button
                     id={'song-delete-' + num}
                     className={"delete-song-button"}

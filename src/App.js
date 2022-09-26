@@ -240,13 +240,30 @@ class App extends React.Component {
         let transaction = new MoveSong_Transaction(this, start, end);
         this.tps.addTransaction(transaction);
     }
+
     addAddSongTransaction = () => {
-
+        let transaction = new AddSong_Transaction(this);
+        this.tps.addTransaction(transaction);
     }
 
-    addDeleteSongTransaction = () => {
+    addEditSongTransaction = (id) => {
+        let list = this.state.currentList;
+        let prevSong = list.songs[id];
+       
+        list.songs[id].title = document.getElementById("edit-input-title").value;
+        list.songs[id].artist = document.getElementById("edit-input-artist").value;
+        list.songs[id].youTubeId = document.getElementById("edit-input-youtubeId").value;
+        let newSong = list.songs[id];
 
+        let transaction = new EditSong_Transaction(this, id, prevSong, newSong);
+        this.tps.addTransaction(transaction);
     }
+
+    addDeleteSongTransaction = (id, song) => {
+        let transaction = new DeleteSong_Transaction(this, id, song);
+        this.tps.addTransaction(transaction);
+    }
+
 
     // THIS FUNCTION BEGINS THE PROCESS OF PERFORMING AN UNDO
     undo = () => {
@@ -337,11 +354,10 @@ class App extends React.Component {
         })
     }
 
-    editSongInfo = (num) => {
+    editSongInfo = (id, newSong) => {
         let list = this.state.currentList;
-        list.songs[num].title = document.getElementById("edit-input-title").value;
-        list.songs[num].artist = document.getElementById("edit-input-artist").value;
-        list.songs[num].youTubeId = document.getElementById("edit-input-youtubeId").value;
+        list.songs[id] = newSong;
+
         this.setStateWithUpdatedList(list);
     }
 
@@ -400,7 +416,7 @@ class App extends React.Component {
                 />
                 <EditSongModal
                     currentList={this.state.currentList}
-                    editSongInfoCallback={this.editSongInfo}
+                    editSongInfoCallback={this.addEditSongTransaction}
                     hideEditSongCallback={this.hideEditSongInfoModal}
                 />
             </div>
