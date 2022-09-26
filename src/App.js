@@ -248,14 +248,15 @@ class App extends React.Component {
 
     addEditSongTransaction = (id) => {
         let list = this.state.currentList;
-        let prevSong = list.songs[id];
-       
+        let song = list.songs[id];
+        let songcopy = {title: song.title, artist: song.artist, youTubeId: song.youTubeId};
+
         list.songs[id].title = document.getElementById("edit-input-title").value;
         list.songs[id].artist = document.getElementById("edit-input-artist").value;
         list.songs[id].youTubeId = document.getElementById("edit-input-youtubeId").value;
         let newSong = list.songs[id];
 
-        let transaction = new EditSong_Transaction(this, id, prevSong, newSong);
+        let transaction = new EditSong_Transaction(this, id, songcopy, newSong);
         this.tps.addTransaction(transaction);
     }
 
