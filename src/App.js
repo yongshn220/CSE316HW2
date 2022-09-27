@@ -321,10 +321,14 @@ class App extends React.Component {
 
     deleteSong = () => {
         let index = document.getElementById("delete-song-modal").value;
+        this.deleteSongByIndex(index);
+        this.hideDeleteSongModal();
+    }
+
+    deleteSongByIndex = (index) => {
         let list = this.state.currentList;
         list.songs.splice(index, 1);
         this.setStateWithUpdatedList(list);
-        this.hideDeleteSongModal();
     }
 
     // Song Edit Modal
@@ -392,7 +396,7 @@ class App extends React.Component {
                     canUndo={canUndo}
                     canRedo={canRedo}
                     canClose={canClose} 
-                    addCallback={this.addSong}
+                    addCallback={this.addAddSongTransaction}
                     undoCallback={this.undo}
                     redoCallback={this.redo}
                     closeCallback={this.closeCurrentList}

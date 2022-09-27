@@ -7,10 +7,10 @@ export default class AddSong_Transaction extends jsTPS_Transaction {
     }
 
     doTransaction() {
-        this.app.addNewSong();
+        this.app.addSong();
     }
     
     undoTransaction() {
-        this.app.deleteSong(this.app.currentList.songs.length - 1);
+        this.app.deleteSongByIndex(this.app.state.currentList.songs.length - 1);
     }
 }
