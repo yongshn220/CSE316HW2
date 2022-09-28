@@ -43,6 +43,35 @@ class App extends React.Component {
             currentList : null,
             sessionData : loadedSessionData
         }
+        
+
+        this.isCtrlOn = false;
+    }
+
+    handleKeyDown = (event) => {
+        event.stopImmediatePropagation();
+        if (event.keyCode === 17)
+        {
+            this.isCtrlOn = true;
+        }
+    }
+    handleKeyUp = (event) => {
+        event.stopImmediatePropagation();
+        if (this.isCtrlOn)
+        {
+            if (event.keyCode === 90)
+            {
+                this.undo();
+            }
+            else if (event.keyCode === 89)
+            {
+                this.redo();
+            }
+            else if (event.keyCode === 17)
+            {
+                this.isCtrlOn = false;
+            }
+        }
     }
     sortKeyNamePairsByName = (keyNamePairs) => {
         keyNamePairs.sort((keyPair1, keyPair2) => {
@@ -378,8 +407,12 @@ class App extends React.Component {
         let canUndo = this.tps.hasTransactionToUndo();
         let canRedo = this.tps.hasTransactionToRedo();
         let canClose = this.state.currentList !== null;
+
+        document.addEventListener("keydown", this.handleKeyDown);
+        document.addEventListener("keyup", this.handleKeyUp);
+
         return (
-            <div id="root">
+            <div id="root"> 
                 <Banner />
                 <SidebarHeading
                     createNewListCallback={this.createNewList}
