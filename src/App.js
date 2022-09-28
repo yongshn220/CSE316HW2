@@ -203,6 +203,7 @@ class App extends React.Component {
     }
     // THIS FUNCTION BEGINS THE PROCESS OF LOADING A LIST FOR EDITING
     loadList = (key) => {
+        this.tps.clearAllTransactions();
         let newCurrentList = this.db.queryGetList(key);
         this.setState(prevState => ({
             listKeyPairMarkedForDeletion : prevState.listKeyPairMarkedForDeletion,
@@ -289,9 +290,16 @@ class App extends React.Component {
         this.tps.addTransaction(transaction);
     }
 
-    addDeleteSongTransaction = (id, song) => {
+    addDeleteSongTransaction = () => {
+        let id = document.getElementById("delete-song-modal").value;
+        let song = this.copySong(this.state.currentList.songs[id]);
         let transaction = new DeleteSong_Transaction(this, id, song);
         this.tps.addTransaction(transaction);
+        this.hideDeleteSongModal();
+    }
+
+    copySong = (song) => {
+        return {title: song.title, artist: song.artist, youTubeId: song.youTubeId};
     }
 
 
@@ -402,7 +410,14 @@ class App extends React.Component {
         this.setStateWithUpdatedList(list);
     }
 
+    addSongById = (id, song) => {
+        let list = this.state.currentList;
+        list.songs.splice(id, 0, song);
+        this.setStateWithUpdatedList(list);
+    }
+
     render() {
+        
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
         let canRedo = this.tps.hasTransactionToRedo();
@@ -449,7 +464,7 @@ class App extends React.Component {
                     deleteListCallback={this.deleteMarkedList}
                 />
                 <DeleteSongModal
-                    deleteSongCallback={this.deleteSong}
+                    deleteSongCallback={this.addDeleteSongTransaction}
                     hideDeleteSongModal={this.hideDeleteSongModal}
                 />
                 <EditSongModal

@@ -506,3 +506,8 @@ span {
   visibility: visible;
   opacity: 1;
 }
+
+.toolbar-button.disabled{
+  background-color: grey;
+  pointer-events: none;
+}

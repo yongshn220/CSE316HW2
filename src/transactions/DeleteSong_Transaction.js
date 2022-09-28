@@ -9,10 +9,10 @@ export default class DeleteSong_Transaction extends jsTPS_Transaction {
     }
 
     doTransaction() {
-        this.app.deleteSong(this.id);
+        this.app.deleteSongByIndex(this.id);
     }
     
     undoTransaction() {
-        this.app.addSong(this.id, this.song);
+        this.app.addSongById(this.id, this.song);
     }
 }
